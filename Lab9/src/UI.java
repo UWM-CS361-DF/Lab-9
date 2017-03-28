@@ -27,13 +27,24 @@ public class UI extends JFrame {
 	
 	ArrayList<JTextField> textField;
 	ArrayList<Employee> employee;
+	String s1, s2;
 	public UI(){	
-		String[] labels = {"Title: ", "First Name: ", "Last Name: ", "Department: ", "Phone: ", "Gender: "};
+		String[] labels = {"First Name: ", "Last Name: ", "Department: ", "Phone: "};
 		int numPairs = labels.length;
 		textField = new ArrayList<JTextField>();
 		employee = new ArrayList<Employee>();
 		//Create and populate the panel.
 		JPanel p = new JPanel(new SpringLayout());
+		JLabel l1 = new JLabel("Title: "); 
+		p.add(l1);
+		JComboBox<String> b1 = new JComboBox<String>();
+		String[] t1 = {"Mr.", "Ms.", "Mrs.", "Dr.", "Col.", "Prof."};
+		for (int i = 0; i < t1.length; i++) {
+			b1.addItem(t1[i]);
+			p.add(b1);
+		}
+		s1 = b1.getItemAt(b1.getSelectedIndex());
+		
 		for (int i = 0; i < numPairs; i++) {
 			JLabel l = new JLabel(labels[i], JLabel.TRAILING);
 			p.add(l);
@@ -41,6 +52,16 @@ public class UI extends JFrame {
 			l.setLabelFor(textField.get(i));
 			p.add(textField.get(i));
 		}
+		
+		JLabel l2 = new JLabel("Gender: ");
+		p.add(l2);
+		JComboBox<String> b2 = new JComboBox<String>();
+		String[] t2 = {"Male", "Female", "Other"};
+		for (int i = 0; i < t2.length; i++) {
+			b2.addItem(t2[i]);
+			p.add(b2);	
+		}
+		s2 = b2.getItemAt(b2.getSelectedIndex());
 				
 		JButton submit = new JButton("Submit");
 		submit.setForeground(Color.BLUE);
@@ -53,7 +74,7 @@ public class UI extends JFrame {
 		p.add(exit);
 		
 		//Lay out the panel.
-		SpringUtilities.makeCompactGrid(p, numPairs + 1, 2, 6, 6, 6, 6);  
+		SpringUtilities.makeCompactGrid(p, numPairs + 3, 2, 6, 6, 6, 6);  
 
 		this.setContentPane(p);
 		
@@ -72,12 +93,12 @@ public class UI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				System.out.println("in the client");
-				String[] emp=new String[6];
-				for (int i = 0; i < 6; i++) {
+				String[] emp=new String[4];
+				for (int i = 0; i < 4; i++) {
 					emp[i]=textField.get(i).getText();
 				}
-				System.out.println(emp[0]+emp[1]+emp[2]+emp[3]+emp[4]+emp[5]);
-				employee.add(new Employee(emp[0],emp[1],emp[2],emp[3],emp[4],emp[5]));
+				System.out.println(s1+emp[0]+emp[1]+emp[2]+emp[3]+s2);
+				employee.add(new Employee(s1, emp[0],emp[1],emp[2],emp[3],s2));
 				
 				// Client will connect to this location
 				URL site = new URL("http://localhost:8000/sendresults");
