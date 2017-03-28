@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -37,13 +39,18 @@ public class UI extends JFrame {
 		JPanel p = new JPanel(new SpringLayout());
 		JLabel l1 = new JLabel("Title: "); 
 		p.add(l1);
-		JComboBox<String> b1 = new JComboBox<String>();
 		String[] t1 = {"Mr.", "Ms.", "Mrs.", "Dr.", "Col.", "Prof."};
-		for (int i = 0; i < t1.length; i++) {
-			b1.addItem(t1[i]);
-			p.add(b1);
-		}
-		s1 = b1.getItemAt(b1.getSelectedIndex());
+		JComboBox<String> b1 = new JComboBox<String>(t1);
+		p.add(b1);
+		b1.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent evt) {
+				if(evt.getStateChange() == ItemEvent.SELECTED){
+					try{
+						s1 = evt.getItem().toString();
+					}catch (Exception e){}
+				}
+			}
+		});
 		
 		for (int i = 0; i < numPairs; i++) {
 			JLabel l = new JLabel(labels[i], JLabel.TRAILING);
@@ -55,13 +62,19 @@ public class UI extends JFrame {
 		
 		JLabel l2 = new JLabel("Gender: ");
 		p.add(l2);
-		JComboBox<String> b2 = new JComboBox<String>();
+		
 		String[] t2 = {"Male", "Female", "Other"};
-		for (int i = 0; i < t2.length; i++) {
-			b2.addItem(t2[i]);
-			p.add(b2);	
-		}
-		s2 = b2.getItemAt(b2.getSelectedIndex());
+		JComboBox<String> b2 = new JComboBox<String>(t2);
+		p.add(b2);
+		b2.addItemListener(new ItemListener(){
+			public void itemStateChanged(ItemEvent evt) {
+				if(evt.getStateChange() == ItemEvent.SELECTED){
+					try{
+						s2 = evt.getItem().toString();
+					}catch (Exception e){}
+				}
+			}
+		});
 				
 		JButton submit = new JButton("Submit");
 		submit.setForeground(Color.BLUE);
@@ -97,7 +110,7 @@ public class UI extends JFrame {
 				for (int i = 0; i < 4; i++) {
 					emp[i]=textField.get(i).getText();
 				}
-				System.out.println(s1+emp[0]+emp[1]+emp[2]+emp[3]+s2);
+				System.out.println(s1+" "+emp[0]+" "+emp[1]+"\t"+emp[2]+"\t"+emp[3]+"\t"+s2);
 				employee.add(new Employee(s1, emp[0],emp[1],emp[2],emp[3],s2));
 				
 				// Client will connect to this location
